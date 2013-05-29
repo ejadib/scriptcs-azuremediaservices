@@ -58,11 +58,17 @@
         <member name="P:ScriptCs.AzureMediaServices.Fakes.ShimAzureMediaServicesClient.ConstructorStringString">
             <summary>Sets the shim of AzureMediaServicesClient.AzureMediaServicesClient(String accountName, String accountKey)</summary>
         </member>
+        <member name="P:ScriptCs.AzureMediaServices.Fakes.ShimAzureMediaServicesClient.GetAssetString">
+            <summary>Sets the shim of AzureMediaServicesClient.GetAsset(String id)</summary>
+        </member>
         <member name="P:ScriptCs.AzureMediaServices.Fakes.ShimAzureMediaServicesClient.GetAssetsExpressionOfFuncOfIAssetBoolean">
             <summary>Sets the shim of AzureMediaServicesClient.GetAssets(Expression`1&lt;Func`2&lt;IAsset,Boolean&gt;&gt; predicate)</summary>
         </member>
         <member name="T:ScriptCs.AzureMediaServices.Fakes.ShimAzureMediaServicesClient.AllInstances">
             <summary>Define shims for all instances members</summary>
+        </member>
+        <member name="P:ScriptCs.AzureMediaServices.Fakes.ShimAzureMediaServicesClient.AllInstances.GetAssetString">
+            <summary>Sets the shim of AzureMediaServicesClient.GetAsset(String id)</summary>
         </member>
         <member name="P:ScriptCs.AzureMediaServices.Fakes.ShimAzureMediaServicesClient.AllInstances.GetAssetsExpressionOfFuncOfIAssetBoolean">
             <summary>Sets the shim of AzureMediaServicesClient.GetAssets(Expression`1&lt;Func`2&lt;IAsset,Boolean&gt;&gt; predicate)</summary>

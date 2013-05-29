@@ -21,10 +21,10 @@
         {
             string importedNamespace = null;
 
-            StubIScriptPackSession session = new StubIScriptPackSession()
-                {
-                    ImportNamespaceString = (ns) => importedNamespace = ns
-                };
+            var session = new StubIScriptPackSession
+            {
+                ImportNamespaceString = ns => importedNamespace = ns
+            };
 
             var mediaServicesScriptPack = new AzureMediaServicesScriptPack();
 

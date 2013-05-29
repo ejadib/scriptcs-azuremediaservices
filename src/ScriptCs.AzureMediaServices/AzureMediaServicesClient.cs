@@ -7,8 +7,8 @@
 
     public class AzureMediaServicesClient
     {
-        private string accountName;
-        private string accountKey;
+        private readonly string accountName;
+        private readonly string accountKey;
 
         public AzureMediaServicesClient(string accountName, string accountKey)
         {
@@ -26,11 +26,16 @@
             this.accountKey = accountKey;
         }
 
-        public IQueryable<IAsset> GetAssets(Expression<Func<IAsset, bool>> predicate)
+        public IQueryable<IAsset> GetAssets(Expression<Func<IAsset, bool>> predicate = null)
         {
-            CloudMediaContext context = new CloudMediaContext(this.accountName, this.accountKey);
-        
-            return context.Assets.Where(predicate);
+            var context = new CloudMediaContext(this.accountName, this.accountKey);
+
+            return predicate != null ? context.Assets.Where(predicate) : context.Assets;
+        }
+
+        public IAsset GetAsset(string assetId)
+        {
+            return this.GetAssets(assets => assets.Id == assetId).FirstOrDefault();
         }
     }
 }
