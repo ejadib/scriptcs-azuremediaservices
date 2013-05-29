@@ -95,9 +95,7 @@
 
                         providedPredicate = predicate;
 
-                        FakesDelegates.Func<IQueryable<IAsset>> func = () => assets.Where(predicate);
-
-                        return ShimsContext.ExecuteWithoutShims(func);
+                        return ShimsContext.ExecuteWithoutShims(() => assets.Where(predicate));
                     });
 
                 var returnedAssets = client.GetAssets(filter);
@@ -175,6 +173,57 @@
                 var returnedAsset = client.GetAsset(AssetId);
 
                 Assert.IsNull(returnedAsset);
+            }
+        }
+
+        [TestMethod]
+        public void WhenGetMediaProcessorsIsCalledThenMediaServicesContextIsCreatedWithTheAccountProvided()
+        {
+            const string AccountName = "myAccount";
+            const string AccountKey = "myKey";
+
+            var client = new AzureMediaServicesClient(AccountName, AccountKey);
+
+            using (ShimsContext.Create())
+            {
+                string providedAccountName = null;
+                string providedAccountKey = null;
+
+                ShimCloudMediaContext.ConstructorStringString = (context, accountName, accountKey) =>
+                {
+                    providedAccountName = accountName;
+                    providedAccountKey = accountKey;
+                };
+
+                client.GetMediaProcessors();
+
+                Assert.AreEqual(AccountName, providedAccountName);
+                Assert.AreEqual(AccountKey, providedAccountKey);
+            }
+        }
+
+        [TestMethod]
+        public void WhenGetMediaProcessorsIsCalledWithNoPredicateThenAllMediaProcessorsAreReturned()
+        {
+            var client = new AzureMediaServicesClient("myAccountName", "myAccountKey");
+
+            using (ShimsContext.Create())
+            {
+                var mediaProcessor = new StubIMediaProcessor { NameGet = () => "My Media Processor" };
+
+                var mediaProcessors = new List<IMediaProcessor> { mediaProcessor };
+
+                var collection = new ShimMediaProcessorBaseCollection();
+
+                collection.Bind(mediaProcessors.AsQueryable());
+
+                ShimCloudMediaContext.ConstructorStringString = (context, accountName, accountKey) => { };
+                ShimCloudMediaContext.AllInstances.MediaProcessorsGet = context => collection;
+
+                var returnedMediaProcesors = client.GetMediaProcessors();
+
+                Assert.AreEqual(1, returnedMediaProcesors.Count());
+                Assert.AreEqual(mediaProcessor.NameGet(), returnedMediaProcesors.First().Name);
             }
         }
     }

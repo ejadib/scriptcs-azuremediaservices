@@ -59,19 +59,25 @@
             <summary>Sets the shim of AzureMediaServicesClient.AzureMediaServicesClient(String accountName, String accountKey)</summary>
         </member>
         <member name="P:ScriptCs.AzureMediaServices.Fakes.ShimAzureMediaServicesClient.GetAssetString">
-            <summary>Sets the shim of AzureMediaServicesClient.GetAsset(String id)</summary>
+            <summary>Sets the shim of AzureMediaServicesClient.GetAsset(String assetId)</summary>
         </member>
         <member name="P:ScriptCs.AzureMediaServices.Fakes.ShimAzureMediaServicesClient.GetAssetsExpressionOfFuncOfIAssetBoolean">
             <summary>Sets the shim of AzureMediaServicesClient.GetAssets(Expression`1&lt;Func`2&lt;IAsset,Boolean&gt;&gt; predicate)</summary>
+        </member>
+        <member name="P:ScriptCs.AzureMediaServices.Fakes.ShimAzureMediaServicesClient.GetMediaProcessors">
+            <summary>Sets the shim of AzureMediaServicesClient.GetMediaProcessors()</summary>
         </member>
         <member name="T:ScriptCs.AzureMediaServices.Fakes.ShimAzureMediaServicesClient.AllInstances">
             <summary>Define shims for all instances members</summary>
         </member>
         <member name="P:ScriptCs.AzureMediaServices.Fakes.ShimAzureMediaServicesClient.AllInstances.GetAssetString">
-            <summary>Sets the shim of AzureMediaServicesClient.GetAsset(String id)</summary>
+            <summary>Sets the shim of AzureMediaServicesClient.GetAsset(String assetId)</summary>
         </member>
         <member name="P:ScriptCs.AzureMediaServices.Fakes.ShimAzureMediaServicesClient.AllInstances.GetAssetsExpressionOfFuncOfIAssetBoolean">
             <summary>Sets the shim of AzureMediaServicesClient.GetAssets(Expression`1&lt;Func`2&lt;IAsset,Boolean&gt;&gt; predicate)</summary>
+        </member>
+        <member name="P:ScriptCs.AzureMediaServices.Fakes.ShimAzureMediaServicesClient.AllInstances.GetMediaProcessors">
+            <summary>Sets the shim of AzureMediaServicesClient.GetMediaProcessors()</summary>
         </member>
         <member name="T:ScriptCs.AzureMediaServices.Fakes.ShimAzureMediaServicesScriptPack">
             <summary>Shim type of ScriptCs.AzureMediaServices.AzureMediaServicesScriptPack</summary>

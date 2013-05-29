@@ -37,5 +37,12 @@
         {
             return this.GetAssets(assets => assets.Id == assetId).FirstOrDefault();
         }
+
+        public IQueryable<IMediaProcessor> GetMediaProcessors()
+        {
+            var context = new CloudMediaContext(this.accountName, this.accountKey);
+
+           return context.MediaProcessors;
+        }
     }
 }
