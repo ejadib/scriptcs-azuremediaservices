@@ -15,6 +15,11 @@ var client = mediaServices.CreateClient("mediaServicesAccountName", "mediaServic
 var assets = client.GetAssets(a => a.Name != "Ez");
 
 Console.WriteLine(assets.Count());
+
+var myAsset = client.GetAsset("nb:cid:UUID:8131a85d-5999-555c-a30f-468cb087701c");
+
+Console.WriteLine(myAsset.Name);
+
 ```
 
 ## What's next
