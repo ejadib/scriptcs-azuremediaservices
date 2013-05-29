@@ -103,6 +103,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="AzureMediaServicesUploaderFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AzureMediaServicesScriptPackFixture.cs" />
     <Compile Include="AzureMediaServicesFixture.cs" />

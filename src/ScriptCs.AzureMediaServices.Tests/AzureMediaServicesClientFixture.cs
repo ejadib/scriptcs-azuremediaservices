@@ -203,7 +203,7 @@
         }
 
         [TestMethod]
-        public void WhenGetMediaProcessorsIsCalledWithNoPredicateThenAllMediaProcessorsAreReturned()
+        public void WhenGetMediaProcessorsIsCalledThenAllMediaProcessorsAreReturned()
         {
             var client = new AzureMediaServicesClient("myAccountName", "myAccountKey");
 
@@ -225,6 +225,20 @@
                 Assert.AreEqual(1, returnedMediaProcesors.Count());
                 Assert.AreEqual(mediaProcessor.NameGet(), returnedMediaProcesors.First().Name);
             }
+        }
+
+        [TestMethod]
+        public void WhenCreateUploaderIsCalledThenUploaderIsReturned()
+        {
+            const string AssetName = "MyVideo";
+            const string Path = @"C:\videos\myvideo.mp4";
+
+            var client = new AzureMediaServicesClient("myAccountName", "myAccountKey");
+
+            var uploader = client.CreateUploader(AssetName, Path);
+
+            Assert.AreEqual(AssetName, uploader.AssetName);
+            Assert.AreEqual(Path, uploader.FilePath);
         }
     }
 }

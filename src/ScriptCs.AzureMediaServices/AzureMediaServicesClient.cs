@@ -28,7 +28,7 @@
 
         public IQueryable<IAsset> GetAssets(Expression<Func<IAsset, bool>> predicate = null)
         {
-            var context = new CloudMediaContext(this.accountName, this.accountKey);
+            var context = this.CreateContext();
 
             return predicate != null ? context.Assets.Where(predicate) : context.Assets;
         }
@@ -40,9 +40,19 @@
 
         public IQueryable<IMediaProcessor> GetMediaProcessors()
         {
-            var context = new CloudMediaContext(this.accountName, this.accountKey);
+            var context = this.CreateContext();
 
            return context.MediaProcessors;
+        }
+
+        public AzureMediaServicesUploader CreateUploader(string assetName, string filePath)
+        {
+            return new AzureMediaServicesUploader(assetName, filePath, this.CreateContext);
+        }
+
+        private CloudMediaContext CreateContext()
+        {
+            return new CloudMediaContext(this.accountName, this.accountKey);
         }
     }
 }
