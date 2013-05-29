@@ -1,0 +1,170 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ScriptCs.AzureMediaServices.Fakes</name>
+    </assembly>
+    <members>
+        <member name="T:ScriptCs.AzureMediaServices.Fakes.ShimAzureMediaServices">
+            <summary>Shim type of ScriptCs.AzureMediaServices.AzureMediaServices</summary>
+        </member>
+        <member name="M:ScriptCs.AzureMediaServices.Fakes.ShimAzureMediaServices.#ctor">
+            <summary>Initializes a new shim instance</summary>
+        </member>
+        <member name="M:ScriptCs.AzureMediaServices.Fakes.ShimAzureMediaServices.#ctor(ScriptCs.AzureMediaServices.AzureMediaServices)">
+            <summary>Initializes a new shim for the given instance</summary>
+        </member>
+        <member name="M:ScriptCs.AzureMediaServices.Fakes.ShimAzureMediaServices.BehaveAsCurrent">
+            <summary>Assigns the &apos;Current&apos; behavior for all methods of the shimmed type</summary>
+        </member>
+        <member name="M:ScriptCs.AzureMediaServices.Fakes.ShimAzureMediaServices.BehaveAsNotImplemented">
+            <summary>Assigns the &apos;NotImplemented&apos; behavior for all methods of the shimmed type</summary>
+        </member>
+        <member name="M:ScriptCs.AzureMediaServices.Fakes.ShimAzureMediaServices.Bind(ScriptCs.Contracts.IScriptPackContext)">
+            <summary>Binds the members of the interface to the shim.</summary>
+        </member>
+        <member name="P:ScriptCs.AzureMediaServices.Fakes.ShimAzureMediaServices.Behavior">
+            <summary>Assigns the behavior for all methods of the shimmed type</summary>
+        </member>
+        <member name="P:ScriptCs.AzureMediaServices.Fakes.ShimAzureMediaServices.Constructor">
+            <summary>Sets the shim of AzureMediaServices.AzureMediaServices()</summary>
+        </member>
+        <member name="P:ScriptCs.AzureMediaServices.Fakes.ShimAzureMediaServices.CreateClientStringString">
+            <summary>Sets the shim of AzureMediaServices.CreateClient(String accountName, String accountKey)</summary>
+        </member>
+        <member name="T:ScriptCs.AzureMediaServices.Fakes.ShimAzureMediaServices.AllInstances">
+            <summary>Define shims for all instances members</summary>
+        </member>
+        <member name="P:ScriptCs.AzureMediaServices.Fakes.ShimAzureMediaServices.AllInstances.CreateClientStringString">
+            <summary>Sets the shim of AzureMediaServices.CreateClient(String accountName, String accountKey)</summary>
+        </member>
+        <member name="T:ScriptCs.AzureMediaServices.Fakes.ShimAzureMediaServicesClient">
+            <summary>Shim type of ScriptCs.AzureMediaServices.AzureMediaServicesClient</summary>
+        </member>
+        <member name="M:ScriptCs.AzureMediaServices.Fakes.ShimAzureMediaServicesClient.#ctor">
+            <summary>Initializes a new shim instance</summary>
+        </member>
+        <member name="M:ScriptCs.AzureMediaServices.Fakes.ShimAzureMediaServicesClient.#ctor(ScriptCs.AzureMediaServices.AzureMediaServicesClient)">
+            <summary>Initializes a new shim for the given instance</summary>
+        </member>
+        <member name="M:ScriptCs.AzureMediaServices.Fakes.ShimAzureMediaServicesClient.BehaveAsCurrent">
+            <summary>Assigns the &apos;Current&apos; behavior for all methods of the shimmed type</summary>
+        </member>
+        <member name="M:ScriptCs.AzureMediaServices.Fakes.ShimAzureMediaServicesClient.BehaveAsNotImplemented">
+            <summary>Assigns the &apos;NotImplemented&apos; behavior for all methods of the shimmed type</summary>
+        </member>
+        <member name="P:ScriptCs.AzureMediaServices.Fakes.ShimAzureMediaServicesClient.Behavior">
+            <summary>Assigns the behavior for all methods of the shimmed type</summary>
+        </member>
+        <member name="P:ScriptCs.AzureMediaServices.Fakes.ShimAzureMediaServicesClient.ConstructorStringString">
+            <summary>Sets the shim of AzureMediaServicesClient.AzureMediaServicesClient(String accountName, String accountKey)</summary>
+        </member>
+        <member name="P:ScriptCs.AzureMediaServices.Fakes.ShimAzureMediaServicesClient.GetAssetsExpressionOfFuncOfIAssetBoolean">
+            <summary>Sets the shim of AzureMediaServicesClient.GetAssets(Expression`1&lt;Func`2&lt;IAsset,Boolean&gt;&gt; predicate)</summary>
+        </member>
+        <member name="T:ScriptCs.AzureMediaServices.Fakes.ShimAzureMediaServicesClient.AllInstances">
+            <summary>Define shims for all instances members</summary>
+        </member>
+        <member name="P:ScriptCs.AzureMediaServices.Fakes.ShimAzureMediaServicesClient.AllInstances.GetAssetsExpressionOfFuncOfIAssetBoolean">
+            <summary>Sets the shim of AzureMediaServicesClient.GetAssets(Expression`1&lt;Func`2&lt;IAsset,Boolean&gt;&gt; predicate)</summary>
+        </member>
+        <member name="T:ScriptCs.AzureMediaServices.Fakes.ShimAzureMediaServicesScriptPack">
+            <summary>Shim type of ScriptCs.AzureMediaServices.AzureMediaServicesScriptPack</summary>
+        </member>
+        <member name="M:ScriptCs.AzureMediaServices.Fakes.ShimAzureMediaServicesScriptPack.#ctor">
+            <summary>Initializes a new shim instance</summary>
+        </member>
+        <member name="M:ScriptCs.AzureMediaServices.Fakes.ShimAzureMediaServicesScriptPack.#ctor(ScriptCs.AzureMediaServices.AzureMediaServicesScriptPack)">
+            <summary>Initializes a new shim for the given instance</summary>
+        </member>
+        <member name="M:ScriptCs.AzureMediaServices.Fakes.ShimAzureMediaServicesScriptPack.BehaveAsCurrent">
+            <summary>Assigns the &apos;Current&apos; behavior for all methods of the shimmed type</summary>
+        </member>
+        <member name="M:ScriptCs.AzureMediaServices.Fakes.ShimAzureMediaServicesScriptPack.BehaveAsNotImplemented">
+            <summary>Assigns the &apos;NotImplemented&apos; behavior for all methods of the shimmed type</summary>
+        </member>
+        <member name="M:ScriptCs.AzureMediaServices.Fakes.ShimAzureMediaServicesScriptPack.Bind(ScriptCs.Contracts.IScriptPack)">
+            <summary>Binds the members of the interface to the shim.</summary>
+        </member>
+        <member name="P:ScriptCs.AzureMediaServices.Fakes.ShimAzureMediaServicesScriptPack.Behavior">
+            <summary>Assigns the behavior for all methods of the shimmed type</summary>
+        </member>
+        <member name="P:ScriptCs.AzureMediaServices.Fakes.ShimAzureMediaServicesScriptPack.Constructor">
+            <summary>Sets the shim of AzureMediaServicesScriptPack.AzureMediaServicesScriptPack()</summary>
+        </member>
+        <member name="P:ScriptCs.AzureMediaServices.Fakes.ShimAzureMediaServicesScriptPack.GetContext">
+            <summary>Sets the shim of AzureMediaServicesScriptPack.GetContext()</summary>
+        </member>
+        <member name="P:ScriptCs.AzureMediaServices.Fakes.ShimAzureMediaServicesScriptPack.InitializeIScriptPackSession">
+            <summary>Sets the shim of AzureMediaServicesScriptPack.Initialize(IScriptPackSession session)</summary>
+        </member>
+        <member name="P:ScriptCs.AzureMediaServices.Fakes.ShimAzureMediaServicesScriptPack.Terminate">
+            <summary>Sets the shim of AzureMediaServicesScriptPack.Terminate()</summary>
+        </member>
+        <member name="T:ScriptCs.AzureMediaServices.Fakes.ShimAzureMediaServicesScriptPack.AllInstances">
+            <summary>Define shims for all instances members</summary>
+        </member>
+        <member name="P:ScriptCs.AzureMediaServices.Fakes.ShimAzureMediaServicesScriptPack.AllInstances.GetContext">
+            <summary>Sets the shim of AzureMediaServicesScriptPack.GetContext()</summary>
+        </member>
+        <member name="P:ScriptCs.AzureMediaServices.Fakes.ShimAzureMediaServicesScriptPack.AllInstances.InitializeIScriptPackSession">
+            <summary>Sets the shim of AzureMediaServicesScriptPack.Initialize(IScriptPackSession session)</summary>
+        </member>
+        <member name="P:ScriptCs.AzureMediaServices.Fakes.ShimAzureMediaServicesScriptPack.AllInstances.Terminate">
+            <summary>Sets the shim of AzureMediaServicesScriptPack.Terminate()</summary>
+        </member>
+        <member name="T:ScriptCs.AzureMediaServices.Fakes.StubAzureMediaServices">
+            <summary>Stub type of ScriptCs.AzureMediaServices.AzureMediaServices</summary>
+        </member>
+        <member name="M:ScriptCs.AzureMediaServices.Fakes.StubAzureMediaServices.#ctor">
+            <summary>Initializes a new instance</summary>
+        </member>
+        <member name="M:ScriptCs.AzureMediaServices.Fakes.StubAzureMediaServices.InitializeStub">
+            <summary>Initializes a new instance of type StubAzureMediaServices</summary>
+        </member>
+        <member name="P:ScriptCs.AzureMediaServices.Fakes.StubAzureMediaServices.CallBase">
+            <summary>Gets or sets a value that indicates if the base method should be called instead of the fallback behavior</summary>
+        </member>
+        <member name="P:ScriptCs.AzureMediaServices.Fakes.StubAzureMediaServices.InstanceBehavior">
+            <summary>Gets or sets the instance behavior.</summary>
+        </member>
+        <member name="P:ScriptCs.AzureMediaServices.Fakes.StubAzureMediaServices.InstanceObserver">
+            <summary>Gets or sets the instance observer.</summary>
+        </member>
+        <member name="T:ScriptCs.AzureMediaServices.Fakes.StubAzureMediaServicesClient">
+            <summary>Stub type of ScriptCs.AzureMediaServices.AzureMediaServicesClient</summary>
+        </member>
+        <member name="M:ScriptCs.AzureMediaServices.Fakes.StubAzureMediaServicesClient.#ctor(System.String,System.String)">
+            <summary>Initializes a new instance</summary>
+        </member>
+        <member name="M:ScriptCs.AzureMediaServices.Fakes.StubAzureMediaServicesClient.InitializeStub">
+            <summary>Initializes a new instance of type StubAzureMediaServicesClient</summary>
+        </member>
+        <member name="P:ScriptCs.AzureMediaServices.Fakes.StubAzureMediaServicesClient.CallBase">
+            <summary>Gets or sets a value that indicates if the base method should be called instead of the fallback behavior</summary>
+        </member>
+        <member name="P:ScriptCs.AzureMediaServices.Fakes.StubAzureMediaServicesClient.InstanceBehavior">
+            <summary>Gets or sets the instance behavior.</summary>
+        </member>
+        <member name="P:ScriptCs.AzureMediaServices.Fakes.StubAzureMediaServicesClient.InstanceObserver">
+            <summary>Gets or sets the instance observer.</summary>
+        </member>
+        <member name="T:ScriptCs.AzureMediaServices.Fakes.StubAzureMediaServicesScriptPack">
+            <summary>Stub type of ScriptCs.AzureMediaServices.AzureMediaServicesScriptPack</summary>
+        </member>
+        <member name="M:ScriptCs.AzureMediaServices.Fakes.StubAzureMediaServicesScriptPack.#ctor">
+            <summary>Initializes a new instance</summary>
+        </member>
+        <member name="M:ScriptCs.AzureMediaServices.Fakes.StubAzureMediaServicesScriptPack.InitializeStub">
+            <summary>Initializes a new instance of type StubAzureMediaServicesScriptPack</summary>
+        </member>
+        <member name="P:ScriptCs.AzureMediaServices.Fakes.StubAzureMediaServicesScriptPack.CallBase">
+            <summary>Gets or sets a value that indicates if the base method should be called instead of the fallback behavior</summary>
+        </member>
+        <member name="P:ScriptCs.AzureMediaServices.Fakes.StubAzureMediaServicesScriptPack.InstanceBehavior">
+            <summary>Gets or sets the instance behavior.</summary>
+        </member>
+        <member name="P:ScriptCs.AzureMediaServices.Fakes.StubAzureMediaServicesScriptPack.InstanceObserver">
+            <summary>Gets or sets the instance observer.</summary>
+        </member>
+    </members>
+</doc>

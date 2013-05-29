@@ -1,0 +1,3 @@
+D:\Projects\scriptcs\scriptcs-azuremediaservices\src\ScriptCs.AzureMediaServices.Tests\Fakes\ScriptCs.Contracts.fakes : warning : Cannot generate shim for ScriptCs.Contracts.IScriptPack: type is an interface.
+D:\Projects\scriptcs\scriptcs-azuremediaservices\src\ScriptCs.AzureMediaServices.Tests\Fakes\ScriptCs.Contracts.fakes : warning : Cannot generate shim for ScriptCs.Contracts.IScriptPackContext: type is an interface.
+D:\Projects\scriptcs\scriptcs-azuremediaservices\src\ScriptCs.AzureMediaServices.Tests\Fakes\ScriptCs.Contracts.fakes : warning : Cannot generate shim for ScriptCs.Contracts.IScriptPackSession: type is an interface.
