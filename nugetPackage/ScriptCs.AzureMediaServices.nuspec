@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd"> 
+  <metadata> 
+    <id>ScriptCs.AzureMediaServices</id> 
+    <version>0.1</version> 
+    <authors>Ezequiel Jadib</authors>
+    <description>A script pack for accessing Azure Media Services from scriptcs CSX script and scriptcs REPL</description> 
+    <language>en-US</language>
+    <licenseUrl>https://github.com/ejadib/scriptcs-azuremediaservices/blob/master/LICENSE.md</licenseUrl>
+    <projectUrl>https://github.com/ejadib/scriptcs-azuremediaservices/blob/master/LICENSE.md</projectUrl>
+    <dependencies>
+      <dependency id="ScriptCs.Contracts" version="0.4.0" />
+      <dependency id="windowsazure.mediaservices" version="2.0.1.1" />
+    </dependencies>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="System" targetFramework="net45" />
+    </frameworkAssemblies>
+  </metadata> 
+  <files>
+    <file src="..\src\ScriptCs.AzureMediaServices\bin\Debug\*.dll" target="lib\net45" />
+  </files>
+</package>
