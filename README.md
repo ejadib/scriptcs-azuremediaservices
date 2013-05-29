@@ -7,6 +7,8 @@ Windows Azure Media Services Script Pack
 Script pack for accessing Azure Media Services from scriptcs CSX script and scriptcs REPL.
 
 ## Usage
+Install the [nuget package](https://nuget.org/packages/ScriptCs.AzureMediaServices/0.1) by running `scriptcs -install ScriptCs.AzureMediaServices`.
+
 ```csharp
 var mediaServices = Require<AzureMediaServices>();
 
