@@ -1,8 +1,11 @@
 ﻿namespace ScriptCs.AzureMediaServices
 {
     using System;
+    using System.IO;
+    using System.Threading;
 
     using Microsoft.WindowsAzure.MediaServices.Client;
+    using System.Threading.Tasks;
 
     public class AzureMediaServicesUploader
     {
@@ -31,20 +34,36 @@
             this.onCompleted = completed;
         }
 
-        public void Start()
+        public Task Start()
         {
             var context = this.createContext();
-
-            this.asset = CreateEmptyAsset(context, this.AssetName, AssetCreationOptions.None);
 
             var blobTransferClient = new BlobTransferClient();
             blobTransferClient.TransferProgressChanged += this.OnBlobTransferProgressChanged;
             blobTransferClient.TransferCompleted += this.OnBlobTransferClientOnTransferCompleted;
+
+            this.asset = CreateEmptyAsset(context, this.AssetName, AssetCreationOptions.None);
+
+            var locator = CreateSasLocator(context, this.asset);
+
+            var fileName = Path.GetFileName(this.FilePath);
+
+            var assetFile = this.asset.AssetFiles.Create(fileName);
+
+            return assetFile.UploadAsync(this.FilePath, blobTransferClient, locator, CancellationToken.None);
         }
 
-        private static IAsset CreateEmptyAsset(CloudMediaContext context, string assetName, AssetCreationOptions assetCreationOptions)
+        private static IAsset CreateEmptyAsset(MediaContextBase context, string assetName, AssetCreationOptions assetCreationOptions)
         {
             return context.Assets.Create(assetName, assetCreationOptions);
+        }
+
+        private static ILocator CreateSasLocator(CloudMediaContext context, IAsset asset)
+        {
+            var accessPolicy = context.AccessPolicies.Create(
+                asset.Name, TimeSpan.FromDays(2), AccessPermissions.Write | AccessPermissions.List);
+
+            return context.Locators.CreateSasLocator(asset, accessPolicy);
         }
 
         private void OnBlobTransferClientOnTransferCompleted(object sender, BlobTransferCompleteEventArgs args)

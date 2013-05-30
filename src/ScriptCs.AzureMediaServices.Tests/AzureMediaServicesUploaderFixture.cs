@@ -1,6 +1,8 @@
 ﻿namespace ScriptCs.AzureMediaServices.Tests
 {
     using System;
+    using System.IO.Fakes;
+    using System.Threading.Tasks.Fakes;
 
     using Microsoft.QualityTools.Testing.Fakes;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -20,15 +22,15 @@
 
             using (ShimsContext.Create())
             {
-                var context = new ShimCloudMediaContext();
+                var collection = new StubAssetBaseCollection
+                                     {
+                                         CreateStringAssetCreationOptions =
+                                             (name, options) => null
+                                     };
+
+                var context = new ShimCloudMediaContext { AssetsGet = () => collection };
                 Func<CloudMediaContext> createContext = () => context;
-
-                var collection = new StubAssetBaseCollection();
-
-                context.AssetsGet = () => collection;
-
-                collection.CreateStringAssetCreationOptions = (name, options) => null;
-
+                
                 ShimBlobTransferClient.AllInstances.TransferProgressChangedAddEventHandlerOfBlobTransferProgressChangedEventArgs = (client, handler) =>
                         {
                             blobTransferProgressHandler = handler;
@@ -65,15 +67,15 @@
             var asset = new StubIAsset() { IdGet = () => "myId" };
 
             using (ShimsContext.Create())
-            {
-                var context = new ShimCloudMediaContext();
+            {                
+                var collection = new StubAssetBaseCollection
+                                     {
+                                         CreateStringAssetCreationOptions =
+                                             (name, options) => asset
+                                     };
+                var context = new ShimCloudMediaContext { AssetsGet = () => collection };
+                
                 Func<CloudMediaContext> createContext = () => context;
-
-                var collection = new StubAssetBaseCollection();
-
-                context.AssetsGet = () => collection;
-
-                collection.CreateStringAssetCreationOptions = (name, options) => asset;
 
                 ShimBlobTransferClient.AllInstances.TransferCompletedAddEventHandlerOfBlobTransferCompleteEventArgs = (client, handler) =>
                         {
@@ -99,6 +101,67 @@
             Assert.AreEqual(asset.IdGet(), providedAssetId);
         }
 
+        [TestMethod]
+        public void WhenStartIsCallednThenUploadProcessBegins()
+        {
+            bool uploadTaskStarted = false;
+
+            var stubAsset = new StubIAsset { NameGet = () => "test" };
+            var stubAssetFile = new StubIAssetFile();
+            var stubAccessPolicy = new StubIAccessPolicy();
+            var stubLocator = new StubILocator();
+            var stubUploadTask = new StubTask(() => uploadTaskStarted = true);
+
+            using (ShimsContext.Create())
+            {
+                var stubAssets = new StubAssetBaseCollection
+                                     {
+                                         CreateStringAssetCreationOptions =
+                                             (name, options) => stubAsset
+                                     };
+
+                var stubAsetsFiles = new StubAssetFileBaseCollection() { CreateString = path => stubAssetFile };
+
+                var accessPolicies = new ShimAccessPolicyBaseCollection
+                                                 {
+                                                     CreateStringTimeSpanAccessPermissions
+                                                         =
+                                                         (name,
+                                                          timesSpan,
+                                                          accessPermissions) =>
+                                                         stubAccessPolicy
+                                                 };
+
+                var locators = new ShimLocatorBaseCollection()
+                                   {
+                                       CreateSasLocatorIAssetIAccessPolicy =
+                                           (asset, acccessPolicy) => stubLocator
+                                   };
+
+                ShimPath.GetFileNameString = fileName => string.Empty;
+
+                ShimBlobTransferClient.Constructor = client => { };
+
+                stubAssetFile.UploadAsyncStringBlobTransferClientILocatorCancellationToken =
+                    (filePath, blobTransferClient, locator, cancellationToken) => stubUploadTask;
+
+                var context = new ShimCloudMediaContext
+                                  {
+                                      AssetsGet = () => stubAssets, 
+                                      FilesGet = () => stubAsetsFiles,
+                                      AccessPoliciesGet = () => accessPolicies,
+                                      LocatorsGet = () => locators,
+                                  };
+
+                Func<CloudMediaContext> createContext = () => context;
+
+                var uploader = new AzureMediaServicesUploader("myVideo", @"C:\videos\myvideo.mp4", createContext);
+
+                uploader.Start();
+            }
+
+            Assert.IsTrue(uploadTaskStarted);
+        }
         // TODO: OnError
         // TODO: OnCancelled
     }

@@ -16,7 +16,7 @@ var mediaServices = Require<AzureMediaServices>();
 var client = mediaServices.CreateClient("mediaServicesAccountName", "mediaServicesAccountKey");
 ```
 
-### Getting all the assets
+### Getting all assets
 ```csharp
 var assets = client.GetAssets();
 ```
