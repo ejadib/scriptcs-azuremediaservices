@@ -9,22 +9,31 @@ Script pack for accessing Azure Media Services from scriptcs CSX script and scri
 ## Usage
 Install the [nuget package](https://nuget.org/packages/ScriptCs.AzureMediaServices/0.1) by running `scriptcs -install ScriptCs.AzureMediaServices`.
 
+### Creating the Azure Media Services Client
 ```csharp
 var mediaServices = Require<AzureMediaServices>();
 
 var client = mediaServices.CreateClient("mediaServicesAccountName", "mediaServicesAccountKey");
+```
+### Getting all the assets
+```csharp
+var assets = client.GetAssets();
+```
 
-var assets = client.GetAssets(a => a.Name == "VOD");
+### Getting assets based on a filter condition
+```csharp
+var assets = client.GetAssets(a => a.AlternateId == "mezzanine");
+```
 
-Console.WriteLine(assets.Count());
-
+### Getting assets by Id
+```csharp
 var myAsset = client.GetAsset("nb:cid:UUID:8131a85d-5999-555c-a30f-468cb087701c");
+```
 
-Console.WriteLine(myAsset.Name);
+### Getting all media processors
 
+```csharp
 var mediaProcessors = client.GetMediaProcessors();
-
-Console.WriteLine(mediaProcessors.Count());
 ```
 
 ## What's next
