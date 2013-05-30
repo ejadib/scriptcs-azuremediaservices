@@ -3,9 +3,9 @@
     using System;
     using System.IO;
     using System.Threading;
+    using System.Threading.Tasks;
 
     using Microsoft.WindowsAzure.MediaServices.Client;
-    using System.Threading.Tasks;
 
     public class AzureMediaServicesUploader
     {
@@ -16,6 +16,8 @@
         private Action<int> onProgress;
 
         private Action<string> onCompleted;
+
+        private Action<Exception> onError;
 
         public AzureMediaServicesUploader(string assetName, string filePath, Func<CloudMediaContext> createContext)
         {
@@ -28,46 +30,53 @@
 
         public string FilePath { get; private set; }
 
-        public void On(Action<int> progress = null, Action<string> completed = null)
+        public void On(Action<int> progress = null, Action<string> completed = null, Action<Exception> error = null)
         {
             this.onProgress = progress;
             this.onCompleted = completed;
+            this.onError = error;
         }
 
-        public Task Start()
+        public async Task Start()
         {
-            var context = this.createContext();
+            var context = this.createContext.Invoke();
 
             var blobTransferClient = new BlobTransferClient();
             blobTransferClient.TransferProgressChanged += this.OnBlobTransferProgressChanged;
             blobTransferClient.TransferCompleted += this.OnBlobTransferClientOnTransferCompleted;
 
-            this.asset = CreateEmptyAsset(context, this.AssetName, AssetCreationOptions.None);
+            this.asset = await CreateEmptyAsset(context, this.AssetName, AssetCreationOptions.None);
 
-            var locator = CreateSasLocator(context, this.asset);
+            var locator = await CreateSasLocatorAsync(context, this.asset);
 
             var fileName = Path.GetFileName(this.FilePath);
 
-            var assetFile = this.asset.AssetFiles.Create(fileName);
+            var assetFile = await this.asset.AssetFiles.CreateAsync(fileName, CancellationToken.None);
 
-            return assetFile.UploadAsync(this.FilePath, blobTransferClient, locator, CancellationToken.None);
+            await assetFile.UploadAsync(this.FilePath, blobTransferClient, locator, CancellationToken.None);
         }
 
-        private static IAsset CreateEmptyAsset(MediaContextBase context, string assetName, AssetCreationOptions assetCreationOptions)
+        private static Task<IAsset> CreateEmptyAsset(MediaContextBase context, string assetName, AssetCreationOptions assetCreationOptions)
         {
-            return context.Assets.Create(assetName, assetCreationOptions);
+            return context.Assets.CreateAsync(assetName, assetCreationOptions, CancellationToken.None);
         }
 
-        private static ILocator CreateSasLocator(CloudMediaContext context, IAsset asset)
+        private static async Task<ILocator> CreateSasLocatorAsync(CloudMediaContext context, IAsset asset)
         {
-            var accessPolicy = context.AccessPolicies.Create(
+            var accessPolicy = await context.AccessPolicies.CreateAsync(
                 asset.Name, TimeSpan.FromDays(2), AccessPermissions.Write | AccessPermissions.List);
 
-            return context.Locators.CreateSasLocator(asset, accessPolicy);
+            return await context.Locators.CreateSasLocatorAsync(asset, accessPolicy);
         }
 
         private void OnBlobTransferClientOnTransferCompleted(object sender, BlobTransferCompleteEventArgs args)
         {
+            if (args.Error != null)
+            {
+                this.onError(args.Error);
+                return;
+            }
+
             this.onCompleted(this.asset.Id);
         }
 

@@ -36,12 +36,13 @@ var myAsset = client.GetAsset("nb:cid:UUID:8131a85d-5999-555c-a30f-468cb087701c"
 client.DeleteAsset("nb:cid:UUID:8131a85d-5999-555c-a30f-468cb087701c");
 ```
 
-### Uploading an asset (*in progress*)
+### Uploading an asset (*experimental*)
 ```csharp
 var uploader = client.CreateUploader("myAssetName", "d:\media\videos\video.mp4");
 uploader.On(
 			progress: progressPercentage => Console.WriteLine(progressPercentage),
-			completed: assetId => Console.WriteLine(assetId));
+			completed: assetId => Console.WriteLine(assetId),
+			error: exception => Console.WriteLine(exception.Message));
 uploader.Start();
 ```
 
