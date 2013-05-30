@@ -70,6 +70,40 @@
         }
 
         [TestMethod]
+        public void WhenGetAssetIsCalledThenMediaServicesContextIsCreatedWithTheAccountProvided()
+        {
+            const string AccountName = "myAccount";
+            const string AccountKey = "myKey";
+
+            var client = new AzureMediaServicesClient(AccountName, AccountKey);
+
+            using (ShimsContext.Create())
+            {
+                string providedAccountName = null;
+                string providedAccountKey = null;
+
+                var sampleAssets = new List<IAsset>().AsQueryable();
+
+                var collection = new StubAssetBaseCollection { QueryableGet = () => sampleAssets };
+
+                ShimCloudMediaContext.ConstructorStringString = (context, accountName, accountKey) =>
+                {
+                    providedAccountName = accountName;
+                    providedAccountKey = accountKey;
+                };
+
+                ShimCloudMediaContext.AllInstances.AssetsGet = context => collection;
+
+                ShimQueryable.WhereOf1IQueryableOfM0ExpressionOfFuncOfM0Boolean<IAsset>((assets, predicate) => sampleAssets);
+
+                client.GetAsset("nb:cid:UUID:8131a85d-5999-555c-a30f-468cb087701c");
+
+                Assert.AreEqual(AccountName, providedAccountName);
+                Assert.AreEqual(AccountKey, providedAccountKey);
+            }
+        }
+
+        [TestMethod]
         public void WhenGetAssetsIsCalledThenAssetsCollectionIsFiltered()
         {
             var client = new AzureMediaServicesClient("myAccountName", "myAccountKey");
@@ -239,6 +273,66 @@
 
             Assert.AreEqual(AssetName, uploader.AssetName);
             Assert.AreEqual(Path, uploader.FilePath);
+        }
+
+        [TestMethod]
+        public void WhenDeleteAssetIsCalledThenMediaServicesContextIsCreatedWithTheAccountProvided()
+        {
+            const string AccountName = "myAccount";
+            const string AccountKey = "myKey";
+
+            var client = new AzureMediaServicesClient(AccountName, AccountKey);
+
+            using (ShimsContext.Create())
+            {
+                string providedAccountName = null;
+                string providedAccountKey = null;
+
+                var sampleAssets = new List<IAsset>().AsQueryable();
+
+                var collection = new StubAssetBaseCollection { QueryableGet = () => sampleAssets };
+
+                ShimCloudMediaContext.ConstructorStringString = (context, accountName, accountKey) =>
+                {
+                    providedAccountName = accountName;
+                    providedAccountKey = accountKey;
+                };
+
+                ShimCloudMediaContext.AllInstances.AssetsGet = context => collection;
+
+                ShimQueryable.WhereOf1IQueryableOfM0ExpressionOfFuncOfM0Boolean<IAsset>((assets, predicate) => sampleAssets);
+                client.DeleteAsset("nb:cid:UUID:8131a85d-5999-555c-a30f-468cb087701c");
+
+                Assert.AreEqual(AccountName, providedAccountName);
+                Assert.AreEqual(AccountKey, providedAccountKey);
+            }
+        }
+
+        [TestMethod]
+        public void WhenDeleteAssetIsCalledWithAnExistingIdThenDeleteIsCalledOnAsset()
+        {
+            bool deleteCalled = false;
+            var client = new AzureMediaServicesClient("myAccountName", "myAccountKey");
+
+            using (ShimsContext.Create())
+            {
+                const string AssetId = "nb:cid:UUID:8131a85d-5999-555c-a30f-468cb087701c";
+                var asset1 = new StubIAsset { IdGet = () => AssetId };
+                var asset2 = new StubIAsset { IdGet = () => "myId" };
+
+                asset1.Delete = () => { deleteCalled = true; };
+
+                var assets = new List<IAsset> { asset1, asset2 };
+
+                var collection = new StubAssetBaseCollection { QueryableGet = assets.AsQueryable };
+
+                ShimCloudMediaContext.ConstructorStringString = (context, accountName, accountKey) => { };
+                ShimCloudMediaContext.AllInstances.AssetsGet = context => collection;
+
+                client.DeleteAsset(AssetId);
+
+                Assert.IsTrue(deleteCalled);
+            }
         }
     }
 }

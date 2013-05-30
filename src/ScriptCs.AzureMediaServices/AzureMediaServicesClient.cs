@@ -45,6 +45,16 @@
            return context.MediaProcessors;
         }
 
+        public void DeleteAsset(string assetId)
+        {
+            var asset = this.GetAsset(assetId);
+
+            if (asset != null)
+            {
+                asset.Delete();
+            }
+        }
+
         public AzureMediaServicesUploader CreateUploader(string assetName, string filePath)
         {
             return new AzureMediaServicesUploader(assetName, filePath, this.CreateContext);
