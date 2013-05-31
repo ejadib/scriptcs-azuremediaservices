@@ -19,6 +19,8 @@
 
         private Action<Exception> onError;
 
+        private ILocator locator;
+
         public AzureMediaServicesUploader(string assetName, string filePath, Func<CloudMediaContext> createContext)
         {
             this.AssetName = assetName;
@@ -47,13 +49,13 @@
 
             this.asset = await CreateEmptyAsset(context, this.AssetName, AssetCreationOptions.None);
 
-            var locator = await CreateSasLocatorAsync(context, this.asset);
+            this.locator = await CreateSasLocatorAsync(context, this.asset);
 
             var fileName = Path.GetFileName(this.FilePath);
 
             var assetFile = await this.asset.AssetFiles.CreateAsync(fileName, CancellationToken.None);
 
-            await assetFile.UploadAsync(this.FilePath, blobTransferClient, locator, CancellationToken.None);
+            await assetFile.UploadAsync(this.FilePath, blobTransferClient, this.locator, CancellationToken.None);
         }
 
         private static Task<IAsset> CreateEmptyAsset(MediaContextBase context, string assetName, AssetCreationOptions assetCreationOptions)
@@ -69,20 +71,37 @@
             return await context.Locators.CreateSasLocatorAsync(asset, accessPolicy);
         }
 
+        private void DeleteAccessPolicyAndLocator()
+        {
+            var accessPolicy = this.locator.AccessPolicy;
+
+            this.locator.Delete();
+            this.locator = null;
+            accessPolicy.Delete();
+        }
+
         private void OnBlobTransferClientOnTransferCompleted(object sender, BlobTransferCompleteEventArgs args)
         {
-            if (args.Error != null)
+            this.DeleteAccessPolicyAndLocator();
+
+            if (args.Error != null && this.onError != null)
             {
-                this.onError(args.Error);
+                this.onError.Invoke(args.Error);
                 return;
             }
 
-            this.onCompleted(this.asset.Id);
+            if (this.onCompleted != null)
+            {
+                this.onCompleted.Invoke(this.asset.Id);
+            }
         }
 
         private void OnBlobTransferProgressChanged(object sender, BlobTransferProgressChangedEventArgs e)
         {
-            this.onProgress(e.ProgressPercentage);
+            if (this.onProgress != null)
+            {
+                this.onProgress.Invoke(e.ProgressPercentage);
+            }
         }
     }
 }

@@ -170,7 +170,7 @@
             var stubAsset = new StubIAsset { IdGet = () => "myId", NameGet = () => "test" };
             var stubAssetFile = new StubIAssetFile();
             var stubAccessPolicy = new StubIAccessPolicy();
-            var stubLocator = new StubILocator();
+            var stubLocator = new StubILocator() { AccessPolicyGet = () => stubAccessPolicy };
 
             using (ShimsContext.Create())
             {
@@ -252,7 +252,7 @@
             var stubAsset = new StubIAsset { IdGet = () => "myId", NameGet = () => "test" };
             var stubAssetFile = new StubIAssetFile();
             var stubAccessPolicy = new StubIAccessPolicy();
-            var stubLocator = new StubILocator();
+            var stubLocator = new StubILocator() { AccessPolicyGet = () => stubAccessPolicy };
             Exception providedError = null;
 
             using (ShimsContext.Create())
@@ -327,6 +327,96 @@
             blobTransferCompletedHandler.Invoke(null, args);
 
             Assert.AreSame(sampleError, providedError);
+        }
+
+        [TestMethod]
+        public async Task WhenBlobTransferCompleteEventIsRaisedThenAccessPolicyAndLocatorAreDeleted()
+        {
+            EventHandler<BlobTransferCompleteEventArgs> blobTransferCompletedHandler = null;
+            var stubAsset = new StubIAsset { IdGet = () => "myId", NameGet = () => "test" };
+            var stubAssetFile = new StubIAssetFile();
+            var stubAccessPolicy = new StubIAccessPolicy();
+            var stubLocator = new StubILocator() { AccessPolicyGet = () => stubAccessPolicy };
+            bool accessPolicyDeleteCalled = false;
+            bool locatorDeletedCalled = false;
+
+            using (ShimsContext.Create())
+            {
+                var stubAssets = new StubAssetBaseCollection
+                {
+                    CreateAsyncStringAssetCreationOptionsCancellationToken =
+                        (name, options, cancellationToken) => Task.FromResult((IAsset)stubAsset)
+                };
+
+                var stubAssetsFiles = new StubAssetFileBaseCollection
+                {
+                    CreateAsyncStringCancellationToken =
+                        (path, cancellationToken) =>
+                        Task.FromResult((IAssetFile)stubAssetFile)
+                };
+
+                stubAsset.AssetFilesGet = () => stubAssetsFiles;
+
+                var accessPolicies = new ShimAccessPolicyBaseCollection
+                {
+                    CreateAsyncStringTimeSpanAccessPermissions
+                        =
+                        (name,
+                         timesSpan,
+                         accessPermissions) =>
+                        Task.FromResult((IAccessPolicy)stubAccessPolicy)
+                };
+
+                stubAccessPolicy.Delete = () =>
+                    {
+                        accessPolicyDeleteCalled = true;
+                    };
+
+                var locators = new ShimLocatorBaseCollection
+                {
+                    CreateSasLocatorAsyncIAssetIAccessPolicy =
+                        (asset, acccessPolicy) => Task.FromResult((ILocator)stubLocator),
+                };
+
+                stubLocator.Delete = () =>
+                {
+                    locatorDeletedCalled = true;
+                };
+
+                ShimPath.GetFileNameString = fileName => string.Empty;
+
+                ShimBlobTransferClient.Constructor = client => { };
+
+                stubAssetFile.UploadAsyncStringBlobTransferClientILocatorCancellationToken =
+                    (filePath, blobTransferClient, locator, cancellationToken) => Task.Delay(0);
+
+                var context = new ShimCloudMediaContext
+                {
+                    AssetsGet = () => stubAssets,
+                    AccessPoliciesGet = () => accessPolicies,
+                    LocatorsGet = () => locators,
+                };
+
+                Func<CloudMediaContext> createContext = () => context;
+
+                ShimBlobTransferClient.AllInstances.TransferCompletedAddEventHandlerOfBlobTransferCompleteEventArgs = (client, handler) =>
+                {
+                    blobTransferCompletedHandler = handler;
+                };
+
+                var uploader = new AzureMediaServicesUploader("myVideo", @"C:\videos\myvideo.mp4", createContext);
+
+                uploader.On();
+
+                await uploader.Start();
+            }
+
+            var args = new BlobTransferCompleteEventArgs(null, true, null, @"C:\videos\myvideo.mp4", new Uri("http://myvideo"), BlobTransferType.Upload);
+
+            blobTransferCompletedHandler.Invoke(null, args);
+
+            Assert.IsTrue(locatorDeletedCalled);
+            Assert.IsTrue(accessPolicyDeleteCalled);
         }
 
         // TODO: OnCancelled
