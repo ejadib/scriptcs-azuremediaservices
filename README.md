@@ -7,7 +7,7 @@ Windows Azure Media Services Script Pack
 Script pack for accessing Azure Media Services from scriptcs CSX script and scriptcs REPL.
 
 ## Usage
-Install the [nuget package](https://nuget.org/packages/ScriptCs.AzureMediaServices/0.1) by running `scriptcs -install ScriptCs.AzureMediaServices`.
+Install the [nuget package](https://nuget.org/packages/ScriptCs.AzureMediaServices) by running `scriptcs -install ScriptCs.AzureMediaServices`.
 
 ### Creating the Azure Media Services Client
 ```csharp
@@ -21,7 +21,7 @@ var client = mediaServices.CreateClient("mediaServicesAccountName", "mediaServic
 var assets = client.GetAssets();
 ```
 
-### Getting assets based on a filter condition
+### Getting assets by filter
 ```csharp
 var assets = client.GetAssets(a => a.AlternateId == "mezzanine");
 ```
@@ -36,7 +36,7 @@ var myAsset = client.GetAsset("nb:cid:UUID:8131a85d-5999-555c-a30f-468cb087701c"
 client.DeleteAsset("nb:cid:UUID:8131a85d-5999-555c-a30f-468cb087701c");
 ```
 
-### Uploading an asset (*experimental*)
+### Uploading an asset
 ```csharp
 var uploader = client.CreateUploader("myAssetName", "d:\media\videos\video.mp4");
 uploader.On(
