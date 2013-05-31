@@ -79,6 +79,7 @@
     <Compile Include="AzureMediaServices.cs" />
     <Compile Include="AzureMediaServicesClient.cs" />
     <Compile Include="AzureMediaServicesScriptPack.cs" />
+    <Compile Include="AzureMediaServicesUploader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
