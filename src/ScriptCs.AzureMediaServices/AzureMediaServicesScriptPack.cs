@@ -18,6 +18,7 @@
             }
 
             session.ImportNamespace("ScriptCs.AzureMediaServices");
+            session.ImportNamespace("Microsoft.WindowsAzure.MediaServices.Client");
         }
 
         public void Terminate()

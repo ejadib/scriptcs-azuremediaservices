@@ -16,27 +16,29 @@ var mediaServices = Require<AzureMediaServices>();
 var client = mediaServices.CreateClient("mediaServicesAccountName", "mediaServicesAccountKey");
 ```
 
-### Getting all assets
+### Working with Assets
+
+#### Getting all assets
 ```csharp
 var assets = client.GetAssets();
 ```
 
-### Getting assets by filter
+#### Getting assets by filter
 ```csharp
 var assets = client.GetAssets(a => a.AlternateId == "mezzanine");
 ```
 
-### Getting assets by Id
+#### Getting assets by Id
 ```csharp
 var myAsset = client.GetAsset("nb:cid:UUID:8131a85d-5999-555c-a30f-468cb087701c");
 ```
 
-### Deleting an asset
+#### Deleting an asset
 ```csharp
 client.DeleteAsset("nb:cid:UUID:8131a85d-5999-555c-a30f-468cb087701c");
 ```
 
-### Uploading an asset
+#### Uploading an asset
 ```csharp
 var uploader = client.CreateUploader("myAssetName", "d:\media\videos\video.mp4");
 uploader.On(
@@ -46,9 +48,18 @@ uploader.On(
 uploader.Start();
 ```
 
-### Getting all media processors
+### Working with Media Processors
+
+#### Getting all media processors
 ```csharp
 var mediaProcessors = client.GetMediaProcessors();
+```
+
+### Working with Jobs
+
+#### Getting Jobs by Job State
+```csharp
+var jobs = client.GetJobsByState(JobState.Finished);
 ```
 
 ## What's next

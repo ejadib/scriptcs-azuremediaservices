@@ -1,6 +1,8 @@
 ﻿namespace ScriptCs.AzureMediaServices.Tests
 {
     using System;
+    using System.Collections.Generic;
+
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using ScriptCs.Contracts.Fakes;
 
@@ -17,20 +19,21 @@
         }
 
         [TestMethod]
-        public void WhenInitializeIsCalledThenScriptCsAzureMediaServicesNamespaceIsImported()
+        public void WhenInitializeIsCalledThenScriptCsAzureMediaServicesAndWindowsMediaServicesClientNamespacesAreImported()
         {
-            string importedNamespace = null;
+            var importedNamespace = new List<string>();
 
             var session = new StubIScriptPackSession
             {
-                ImportNamespaceString = ns => importedNamespace = ns
+                ImportNamespaceString = ns => importedNamespace.Add(ns)
             };
 
             var mediaServicesScriptPack = new AzureMediaServicesScriptPack();
 
             mediaServicesScriptPack.Initialize(session);
 
-            Assert.AreEqual("ScriptCs.AzureMediaServices", importedNamespace);
+            Assert.IsTrue(importedNamespace.Contains("ScriptCs.AzureMediaServices"));
+            Assert.IsTrue(importedNamespace.Contains("Microsoft.WindowsAzure.MediaServices.Client"));
         }
 
         [TestMethod]
