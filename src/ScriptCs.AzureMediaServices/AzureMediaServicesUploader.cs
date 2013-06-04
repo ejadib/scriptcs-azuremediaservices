@@ -73,11 +73,14 @@
 
         private void DeleteAccessPolicyAndLocator()
         {
-            var accessPolicy = this.locator.AccessPolicy;
+            if (this.locator != null)
+            {
+                var accessPolicy = this.locator.AccessPolicy;
 
-            this.locator.Delete();
-            this.locator = null;
-            accessPolicy.Delete();
+                this.locator.Delete();
+                this.locator = null;
+                accessPolicy.Delete();
+            }
         }
 
         private void OnBlobTransferClientOnTransferCompleted(object sender, BlobTransferCompleteEventArgs args)

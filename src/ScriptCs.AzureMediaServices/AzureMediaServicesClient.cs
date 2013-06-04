@@ -35,14 +35,7 @@
 
         public IAsset GetAsset(string assetId)
         {
-            return this.GetAssets(assets => assets.Id == assetId).FirstOrDefault();
-        }
-
-        public IQueryable<IMediaProcessor> GetMediaProcessors()
-        {
-            var context = this.CreateContext();
-
-           return context.MediaProcessors;
+            return this.GetAssets(asset => asset.Id == assetId).FirstOrDefault();
         }
 
         public void DeleteAsset(string assetId)
@@ -53,6 +46,20 @@
             {
                 asset.Delete();
             }
+        }
+
+        public IQueryable<IMediaProcessor> GetMediaProcessors()
+        {
+            var context = this.CreateContext();
+
+            return context.MediaProcessors;
+        }
+
+        public IQueryable<IJob> GetJobsByState(JobState state)
+        {
+            var context = this.CreateContext();
+
+            return context.Jobs.Where(job => job.State == state);
         }
 
         public AzureMediaServicesUploader CreateUploader(string assetName, string filePath)
