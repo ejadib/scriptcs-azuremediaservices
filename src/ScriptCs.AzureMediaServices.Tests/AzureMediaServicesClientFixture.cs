@@ -70,7 +70,7 @@
         }
 
         [TestMethod]
-        public void WhenGetAssetsIsCalledThenAssetsCollectionIsFiltered()
+        public void WhenGetAssetsIsCalledWithAPredicateThenAssetsCollectionIsFiltered()
         {
             var client = new AzureMediaServicesClient("myAccountName", "myAccountKey");
 
@@ -390,6 +390,92 @@
                 var returnedJobs = client.GetJobsByState(JobState.Finished);
 
                 Assert.AreEqual(1, returnedJobs.Count());
+            }
+        }
+
+        [TestMethod]
+        public void WhenGetJobIsCalledThenMediaServicesContextIsCreatedWithTheAccountProvided()
+        {
+            const string AccountName = "myAccount";
+            const string AccountKey = "myKey";
+
+            var client = new AzureMediaServicesClient(AccountName, AccountKey);
+
+            using (ShimsContext.Create())
+            {
+                string providedAccountName = null;
+                string providedAccountKey = null;
+
+                var sampleJobs = new List<IJob>().AsQueryable();
+
+                var collection = new ShimJobBaseCollection();
+                collection.Bind(sampleJobs);
+
+                ShimCloudMediaContext.ConstructorStringString = (context, accountName, accountKey) =>
+                {
+                    providedAccountName = accountName;
+                    providedAccountKey = accountKey;
+                };
+
+                ShimCloudMediaContext.AllInstances.JobsGet = context => collection;
+
+                ShimQueryable.WhereOf1IQueryableOfM0ExpressionOfFuncOfM0Boolean<IJob>((jobs, predicate) => sampleJobs);
+
+                client.GetJob("nb:cid:UUID:8131a85d-5999-555c-a30f-468cb087701c");
+
+                Assert.AreEqual(AccountName, providedAccountName);
+                Assert.AreEqual(AccountKey, providedAccountKey);
+            }
+        }
+
+        [TestMethod]
+        public void WhenGetJobIsCalledWithAnExistingIdThenJobIsReturned()
+        {
+            var client = new AzureMediaServicesClient("myAccountName", "myAccountKey");
+
+            using (ShimsContext.Create())
+            {
+                const string JobId = "nb:cid:UUID:8131a85d-5999-555c-a30f-468cb087701c";
+                var job1 = new StubIJob() { IdGet = () => JobId };
+                var job2 = new StubIJob() { IdGet = () => "myId" };
+
+                var jobs = new List<IJob> { job1, job2 };
+
+                var collection = new ShimJobBaseCollection();
+
+                collection.Bind(jobs.AsQueryable());
+
+                ShimCloudMediaContext.ConstructorStringString = (context, accountName, accountKey) => { };
+                ShimCloudMediaContext.AllInstances.JobsGet = context => collection;
+
+                var returnedJob = client.GetJob(JobId);
+
+                Assert.AreSame(job1, returnedJob);
+            }
+        }
+
+        [TestMethod]
+        public void WhenGetJobIsCalledWithANonExistingIdThenNullIsReturned()
+        {
+            var client = new AzureMediaServicesClient("myAccountName", "myAccountKey");
+
+            using (ShimsContext.Create())
+            {
+                const string JobId = "nb:cid:UUID:8131a85d-5999-555c-a30f-468cb087701c";
+                var job = new StubIJob() { IdGet = () => "myId" };
+
+                var jobs = new List<IJob> { job };
+
+                var collection = new ShimJobBaseCollection();
+
+                collection.Bind(jobs.AsQueryable());
+
+                ShimCloudMediaContext.ConstructorStringString = (context, accountName, accountKey) => { };
+                ShimCloudMediaContext.AllInstances.JobsGet = context => collection;
+
+                var returnedJob = client.GetJob(JobId);
+
+                Assert.IsNull(returnedJob);
             }
         }
     }

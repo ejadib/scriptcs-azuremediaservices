@@ -62,6 +62,13 @@
             return context.Jobs.Where(job => job.State == state);
         }
 
+        public IJob GetJob(string jobId)
+        {
+            var context = this.CreateContext();
+
+            return context.Jobs.Where(job => job.Id == jobId).FirstOrDefault();
+        }
+
         public AzureMediaServicesUploader CreateUploader(string assetName, string filePath)
         {
             return new AzureMediaServicesUploader(assetName, filePath, this.CreateContext);

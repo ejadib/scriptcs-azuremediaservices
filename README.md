@@ -57,9 +57,14 @@ var mediaProcessors = client.GetMediaProcessors();
 
 ### Working with Jobs
 
-#### Getting Jobs by Job State
+#### Getting jobs by Job State
 ```csharp
 var jobs = client.GetJobsByState(JobState.Finished);
+```
+
+#### Getting jobs by Id
+```csharp
+var job = client.GetJob("nb:jid:UUID:8ba5f1ca-d23d-b847-8e7a-34d1f4ce98a7");
 ```
 
 ## What's next
