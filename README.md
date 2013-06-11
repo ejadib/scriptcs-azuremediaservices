@@ -69,7 +69,7 @@ var job = client.GetJob("nb:jid:UUID:8ba5f1ca-d23d-b847-8e7a-34d1f4ce98a7");
 
 #### Encoding a video (Experimental API)
 ```csharp
-// CreateEncoder expects as parameter:
+// CreateEncoder expects as parameters:
 //  - the name of job to be created
 //  - the input asset that will be used during the encoding process
 //  - the configuration or preset to be used for the encodiding process
