@@ -67,8 +67,13 @@ var jobs = client.GetJobsByState(JobState.Finished);
 var job = client.GetJob("nb:jid:UUID:8ba5f1ca-d23d-b847-8e7a-34d1f4ce98a7");
 ```
 
-#### Encoding a video (Expirimental API)
+#### Encoding a video (Experimental API)
 ```csharp
+// CreateEncoder expects as parameter:
+//  - the name of job to be created
+//  - the input asset that will be used during the encoding process
+//  - the configuration or preset to be used for the encodiding process
+//  - the desired name for the encoding output asset
 var encoder = client.CreateEncoder("My Job Name", inputAsset, "H264 Broadband 720p", "My Output Asset Name");
 encoder.On(
 			processing: jobId => Console.WriteLine("Processing Job {0}", jobId),
