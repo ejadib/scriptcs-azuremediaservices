@@ -3,6 +3,7 @@
     using System;
     using System.Linq;
     using System.Linq.Expressions;
+
     using Microsoft.WindowsAzure.MediaServices.Client;
 
     public class AzureMediaServicesClient
@@ -72,6 +73,11 @@
         public AzureMediaServicesUploader CreateUploader(string assetName, string filePath)
         {
             return new AzureMediaServicesUploader(assetName, filePath, this.CreateContext);
+        }
+
+        public AzureMediaServicesEncoder CreateEncoder(string jobName, IAsset inputAsset, string configuration, string outputAssetName)
+        {
+            return new AzureMediaServicesEncoder(jobName, inputAsset, configuration, outputAssetName, this.CreateContext);
         }
 
         private CloudMediaContext CreateContext()

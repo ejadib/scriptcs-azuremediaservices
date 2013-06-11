@@ -478,5 +478,23 @@
                 Assert.IsNull(returnedJob);
             }
         }
+
+        [TestMethod]
+        public void WhenCreateEncoderIsCalledThenEncoderIsReturnedAndConfigured()
+        {
+            const string JobName = "MyVideo";
+            IAsset asset = new StubIAsset();
+            const string OutputAssetName = "OutputAsset Name";
+            const string Configuration = "H264 Broadband 720p";
+
+            var client = new AzureMediaServicesClient("myAccountName", "myAccountKey");
+
+            var encoder = client.CreateEncoder(JobName, asset, Configuration, OutputAssetName);
+
+            Assert.AreEqual(JobName, encoder.JobName);
+            Assert.AreEqual(asset, encoder.InputAsset);
+            Assert.AreEqual(OutputAssetName, encoder.OutputAssetName);
+            Assert.AreEqual(Configuration, encoder.Configuration);
+        }
     }
 }

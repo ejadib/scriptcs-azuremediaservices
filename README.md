@@ -67,6 +67,16 @@ var jobs = client.GetJobsByState(JobState.Finished);
 var job = client.GetJob("nb:jid:UUID:8ba5f1ca-d23d-b847-8e7a-34d1f4ce98a7");
 ```
 
+#### Encoding a video (Expirimental API)
+```csharp
+var encoder = client.CreateEncoder("My Job Name", inputAsset, "H264 Broadband 720p", "My Output Asset Name");
+encoder.On(
+			processing: jobId => Console.WriteLine("Processing Job {0}", jobId),
+			finished: jobId => Console.WriteLine(jobId),
+			error: errorMessage => Console.WriteLine(errorMessage));
+encoder.Start();
+```
+
 ## What's next
 * Add support for more Media Services operations
 * Listen to community feedback.
