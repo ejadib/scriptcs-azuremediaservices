@@ -3,6 +3,7 @@
     using System;
     using System.Linq;
     using System.Linq.Expressions;
+
     using Microsoft.WindowsAzure.MediaServices.Client;
 
     public class AzureMediaServicesClient
@@ -35,14 +36,7 @@
 
         public IAsset GetAsset(string assetId)
         {
-            return this.GetAssets(assets => assets.Id == assetId).FirstOrDefault();
-        }
-
-        public IQueryable<IMediaProcessor> GetMediaProcessors()
-        {
-            var context = this.CreateContext();
-
-           return context.MediaProcessors;
+            return this.GetAssets(asset => asset.Id == assetId).FirstOrDefault();
         }
 
         public void DeleteAsset(string assetId)
@@ -55,9 +49,35 @@
             }
         }
 
+        public IQueryable<IMediaProcessor> GetMediaProcessors()
+        {
+            var context = this.CreateContext();
+
+            return context.MediaProcessors;
+        }
+
+        public IQueryable<IJob> GetJobsByState(JobState state)
+        {
+            var context = this.CreateContext();
+
+            return context.Jobs.Where(job => job.State == state);
+        }
+
+        public IJob GetJob(string jobId)
+        {
+            var context = this.CreateContext();
+
+            return context.Jobs.Where(job => job.Id == jobId).FirstOrDefault();
+        }
+
         public AzureMediaServicesUploader CreateUploader(string assetName, string filePath)
         {
             return new AzureMediaServicesUploader(assetName, filePath, this.CreateContext);
+        }
+
+        public AzureMediaServicesEncoder CreateEncoder(string jobName, IAsset inputAsset, string configuration, string outputAssetName)
+        {
+            return new AzureMediaServicesEncoder(jobName, inputAsset, configuration, outputAssetName, this.CreateContext);
         }
 
         private CloudMediaContext CreateContext()

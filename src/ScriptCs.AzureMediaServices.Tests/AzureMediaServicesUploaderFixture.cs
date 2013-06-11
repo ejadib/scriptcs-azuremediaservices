@@ -14,7 +14,7 @@
     public class AzureMediaServicesUploaderFixture
     {
         [TestMethod]
-        public async Task WhenStartIsCallednThenUploadAsyncOnAssetFileIsCalled()
+        public async Task WhenStartIsCalledThenUploadAsyncOnAssetFileIsCalled()
         {
             bool uploadAsyncCalled = false;
 

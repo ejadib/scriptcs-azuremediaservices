@@ -16,29 +16,31 @@ var mediaServices = Require<AzureMediaServices>();
 var client = mediaServices.CreateClient("mediaServicesAccountName", "mediaServicesAccountKey");
 ```
 
-### Getting all assets
+### Working with Assets
+
+#### Getting all assets
 ```csharp
 var assets = client.GetAssets();
 ```
 
-### Getting assets by filter
+#### Getting assets by filter
 ```csharp
 var assets = client.GetAssets(a => a.AlternateId == "mezzanine");
 ```
 
-### Getting assets by Id
+#### Getting assets by Id
 ```csharp
 var myAsset = client.GetAsset("nb:cid:UUID:8131a85d-5999-555c-a30f-468cb087701c");
 ```
 
-### Deleting an asset
+#### Deleting an asset
 ```csharp
 client.DeleteAsset("nb:cid:UUID:8131a85d-5999-555c-a30f-468cb087701c");
 ```
 
-### Uploading an asset
+#### Uploading an asset
 ```csharp
-var uploader = client.CreateUploader("myAssetName", "d:\media\videos\video.mp4");
+var uploader = client.CreateUploader("myAssetName", @"d:\media\videos\video.mp4");
 uploader.On(
 			progress: progressPercentage => Console.WriteLine(progressPercentage),
 			completed: assetId => Console.WriteLine(assetId),
@@ -46,9 +48,38 @@ uploader.On(
 uploader.Start();
 ```
 
-### Getting all media processors
+### Working with Media Processors
+
+#### Getting all media processors
 ```csharp
 var mediaProcessors = client.GetMediaProcessors();
+```
+
+### Working with Jobs
+
+#### Getting jobs by Job State
+```csharp
+var jobs = client.GetJobsByState(JobState.Finished);
+```
+
+#### Getting jobs by Id
+```csharp
+var job = client.GetJob("nb:jid:UUID:8ba5f1ca-d23d-b847-8e7a-34d1f4ce98a7");
+```
+
+#### Encoding a video (Experimental API)
+```csharp
+// CreateEncoder expects as parameters:
+//  - the name of job to be created
+//  - the input asset that will be used during the encoding process
+//  - the configuration or preset to be used for the encodiding process
+//  - the desired name for the encoding output asset
+var encoder = client.CreateEncoder("My Job Name", inputAsset, "H264 Broadband 720p", "My Output Asset Name");
+encoder.On(
+			processing: jobId => Console.WriteLine("Processing Job {0}", jobId),
+			finished: jobId => Console.WriteLine(jobId),
+			error: errorMessage => Console.WriteLine(errorMessage));
+encoder.Start();
 ```
 
 ## What's next

@@ -109,6 +109,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="AzureMediaServicesEncoderFixture.cs" />
     <Compile Include="AzureMediaServicesUploaderFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AzureMediaServicesScriptPackFixture.cs" />
