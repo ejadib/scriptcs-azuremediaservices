@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>Scriptcs-azuremediaservices by ejadib</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>Scriptcs-azuremediaservices</h1>
+        <h2>Script pack for accessing Azure Media Services from scriptcs CSX script and scriptcs REPL.</h2>
+        <a href="https://github.com/ejadib/scriptcs-azuremediaservices" class="button"><small>View project on</small>GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h1>
+<a name="scriptcs-azuremediaservices" class="anchor" href="#scriptcs-azuremediaservices"><span class="octicon octicon-link"></span></a>scriptcs-azuremediaservices</h1>
+
+<p>Windows Azure Media Services Script Pack</p>
+
+<h2>
+<a name="what-is-it" class="anchor" href="#what-is-it"><span class="octicon octicon-link"></span></a>What is it?</h2>
+
+<p>Script pack for accessing Azure Media Services from scriptcs CSX script and scriptcs REPL.</p>
+
+<h2>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>Install the <a href="https://nuget.org/packages/ScriptCs.AzureMediaServices">nuget package</a> by running <code>scriptcs -install ScriptCs.AzureMediaServices</code>.</p>
+
+<h3>
+<a name="creating-the-azure-media-services-client" class="anchor" href="#creating-the-azure-media-services-client"><span class="octicon octicon-link"></span></a>Creating the Azure Media Services Client</h3>
+
+<div class="highlight"><pre><span class="kt">var</span> <span class="n">mediaServices</span> <span class="p">=</span> <span class="n">Require</span><span class="p">&lt;</span><span class="n">AzureMediaServices</span><span class="p">&gt;();</span>
+
+<span class="kt">var</span> <span class="n">client</span> <span class="p">=</span> <span class="n">mediaServices</span><span class="p">.</span><span class="n">CreateClient</span><span class="p">(</span><span class="s">"mediaServicesAccountName"</span><span class="p">,</span> <span class="s">"mediaServicesAccountKey"</span><span class="p">);</span>
+</pre></div>
+
+<h3>
+<a name="working-with-assets" class="anchor" href="#working-with-assets"><span class="octicon octicon-link"></span></a>Working with Assets</h3>
+
+<h4>
+<a name="getting-all-assets" class="anchor" href="#getting-all-assets"><span class="octicon octicon-link"></span></a>Getting all assets</h4>
+
+<div class="highlight"><pre><span class="kt">var</span> <span class="n">assets</span> <span class="p">=</span> <span class="n">client</span><span class="p">.</span><span class="n">GetAssets</span><span class="p">();</span>
+</pre></div>
+
+<h4>
+<a name="getting-assets-by-filter" class="anchor" href="#getting-assets-by-filter"><span class="octicon octicon-link"></span></a>Getting assets by filter</h4>
+
+<div class="highlight"><pre><span class="kt">var</span> <span class="n">assets</span> <span class="p">=</span> <span class="n">client</span><span class="p">.</span><span class="n">GetAssets</span><span class="p">(</span><span class="n">a</span> <span class="p">=&gt;</span> <span class="n">a</span><span class="p">.</span><span class="n">AlternateId</span> <span class="p">==</span> <span class="s">"mezzanine"</span><span class="p">);</span>
+</pre></div>
+
+<h4>
+<a name="getting-assets-by-id" class="anchor" href="#getting-assets-by-id"><span class="octicon octicon-link"></span></a>Getting assets by Id</h4>
+
+<div class="highlight"><pre><span class="kt">var</span> <span class="n">myAsset</span> <span class="p">=</span> <span class="n">client</span><span class="p">.</span><span class="n">GetAsset</span><span class="p">(</span><span class="s">"nb:cid:UUID:8131a85d-5999-555c-a30f-468cb087701c"</span><span class="p">);</span>
+</pre></div>
+
+<h4>
+<a name="deleting-an-asset" class="anchor" href="#deleting-an-asset"><span class="octicon octicon-link"></span></a>Deleting an asset</h4>
+
+<div class="highlight"><pre><span class="n">client</span><span class="p">.</span><span class="n">DeleteAsset</span><span class="p">(</span><span class="s">"nb:cid:UUID:8131a85d-5999-555c-a30f-468cb087701c"</span><span class="p">);</span>
+</pre></div>
+
+<h4>
+<a name="uploading-an-asset" class="anchor" href="#uploading-an-asset"><span class="octicon octicon-link"></span></a>Uploading an asset</h4>
+
+<div class="highlight"><pre><span class="kt">var</span> <span class="n">uploader</span> <span class="p">=</span> <span class="n">client</span><span class="p">.</span><span class="n">CreateUploader</span><span class="p">(</span><span class="s">"myAssetName"</span><span class="p">,</span> <span class="s">@"d:\media\videos\video.mp4"</span><span class="p">);</span>
+<span class="n">uploader</span><span class="p">.</span><span class="n">On</span><span class="p">(</span>
+            <span class="n">progress</span><span class="p">:</span> <span class="n">progressPercentage</span> <span class="p">=&gt;</span> <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">progressPercentage</span><span class="p">),</span>
+            <span class="n">completed</span><span class="p">:</span> <span class="n">assetId</span> <span class="p">=&gt;</span> <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">assetId</span><span class="p">),</span>
+            <span class="n">error</span><span class="p">:</span> <span class="n">exception</span> <span class="p">=&gt;</span> <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">exception</span><span class="p">.</span><span class="n">Message</span><span class="p">));</span>
+<span class="n">uploader</span><span class="p">.</span><span class="n">Start</span><span class="p">();</span>
+</pre></div>
+
+<h3>
+<a name="working-with-media-processors" class="anchor" href="#working-with-media-processors"><span class="octicon octicon-link"></span></a>Working with Media Processors</h3>
+
+<h4>
+<a name="getting-all-media-processors" class="anchor" href="#getting-all-media-processors"><span class="octicon octicon-link"></span></a>Getting all media processors</h4>
+
+<div class="highlight"><pre><span class="kt">var</span> <span class="n">mediaProcessors</span> <span class="p">=</span> <span class="n">client</span><span class="p">.</span><span class="n">GetMediaProcessors</span><span class="p">();</span>
+</pre></div>
+
+<h3>
+<a name="working-with-jobs" class="anchor" href="#working-with-jobs"><span class="octicon octicon-link"></span></a>Working with Jobs</h3>
+
+<h4>
+<a name="getting-jobs-by-job-state" class="anchor" href="#getting-jobs-by-job-state"><span class="octicon octicon-link"></span></a>Getting jobs by Job State</h4>
+
+<div class="highlight"><pre><span class="kt">var</span> <span class="n">jobs</span> <span class="p">=</span> <span class="n">client</span><span class="p">.</span><span class="n">GetJobsByState</span><span class="p">(</span><span class="n">JobState</span><span class="p">.</span><span class="n">Finished</span><span class="p">);</span>
+</pre></div>
+
+<h4>
+<a name="getting-jobs-by-id" class="anchor" href="#getting-jobs-by-id"><span class="octicon octicon-link"></span></a>Getting jobs by Id</h4>
+
+<div class="highlight"><pre><span class="kt">var</span> <span class="n">job</span> <span class="p">=</span> <span class="n">client</span><span class="p">.</span><span class="n">GetJob</span><span class="p">(</span><span class="s">"nb:jid:UUID:8ba5f1ca-d23d-b847-8e7a-34d1f4ce98a7"</span><span class="p">);</span>
+</pre></div>
+
+<h4>
+<a name="encoding-a-video-experimental-api" class="anchor" href="#encoding-a-video-experimental-api"><span class="octicon octicon-link"></span></a>Encoding a video (Experimental API)</h4>
+
+<div class="highlight"><pre><span class="c1">// CreateEncoder expects as parameters:</span>
+<span class="c1">//  - the name of job to be created</span>
+<span class="c1">//  - the input asset that will be used during the encoding process</span>
+<span class="c1">//  - the configuration or preset to be used for the encodiding process</span>
+<span class="c1">//  - the desired name for the encoding output asset</span>
+<span class="kt">var</span> <span class="n">encoder</span> <span class="p">=</span> <span class="n">client</span><span class="p">.</span><span class="n">CreateEncoder</span><span class="p">(</span><span class="s">"My Job Name"</span><span class="p">,</span> <span class="n">inputAsset</span><span class="p">,</span> <span class="s">"H264 Broadband 720p"</span><span class="p">,</span> <span class="s">"My Output Asset Name"</span><span class="p">);</span>
+<span class="n">encoder</span><span class="p">.</span><span class="n">On</span><span class="p">(</span>
+            <span class="n">processing</span><span class="p">:</span> <span class="n">jobId</span> <span class="p">=&gt;</span> <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"Processing Job {0}"</span><span class="p">,</span> <span class="n">jobId</span><span class="p">),</span>
+            <span class="n">finished</span><span class="p">:</span> <span class="n">jobId</span> <span class="p">=&gt;</span> <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">jobId</span><span class="p">),</span>
+            <span class="n">error</span><span class="p">:</span> <span class="n">errorMessage</span> <span class="p">=&gt;</span> <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">errorMessage</span><span class="p">));</span>
+<span class="n">encoder</span><span class="p">.</span><span class="n">Start</span><span class="p">();</span>
+</pre></div>
+
+<h2>
+<a name="whats-next" class="anchor" href="#whats-next"><span class="octicon octicon-link"></span></a>What's next</h2>
+
+<ul>
+<li>Add support for more Media Services operations</li>
+<li>Listen to community feedback.</li>
+</ul>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/ejadib/scriptcs-azuremediaservices/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/ejadib/scriptcs-azuremediaservices/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/ejadib/scriptcs-azuremediaservices"></a> is maintained by <a href="https://github.com/ejadib">ejadib</a>.</p>
+
+          <p>This page was generated by <a href="pages.github.com">GitHub Pages</a> using the Architect theme by <a href="http://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>
